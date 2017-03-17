@@ -1,28 +1,44 @@
 
 To create a license:
-  $  curl -H "Content-Type: application/json" -X POST -d '{"name":"anotherLicense", "text":"This license is ...", "feedIds":[]}' http://<web_url>:<port>/api/metadata/1.0/secure/license 
+  $  curl -H "Content-Type: multipart/form-data" -X POST http://<web_url>:<port>/api/metadata/1.0/secure/license?name=<license_name>&feeds=<feed_id>(,<feed_id>)* -F "file=@<local_file_path>"
 This returns:
-  {"id":"af2d8925-3f02-4d5e-bef8-9f03ec2bc3e4","name":"anotherLicense","text":"This license is ...","feedIds":[]}
+  {"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]}
   
 Get the licenses:
   $ curl -X GET http://<web_url>:<port>/api/metadata/1.0/secure/license
-This returns:
-  [{"id":"af2d8925-3f02-4d5e-bef8-9f03ec2bc3e4","name":"anotherLicense","text":"This license is ...","feedIds":[]},{"id":"cc49be68-e840-4824-814d-7ccb6a21b17b","name":"secondLicense","text":"This license is ...","feedIds":["asx","sder","xxde"]},{"id":"fbaa9c2a-ca31-42f4-81d8-8f862d7d76fa","name":"firstLicense","text":"This license is ...","feedIds":[]}]
+This returns the list of licenses:
+  [
+    {"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]}
+    (,{"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]})*
+  ]
   
 Get a specific license:
-  $ curl -X GET http://<web_url>:<port>/api/metadata/1.0/secure/license/cc49be68-e840-4824-814d-7ccb6a21b17b 
+  $ curl -X GET http://<web_url>:<port>/api/metadata/1.0/secure/license/<license_id> 
 This returns:
-  {"id":"cc49be68-e840-4824-814d-7ccb6a21b17b","name":"secondLicense","text":"This license is ...","feedIds":["asx","sder","xxde"]}
+  The license file, named <originalFileName>
 
 Delete a license:
-  $ curl -X DELETE http://<web_url>:<port>/api/metadata/1.0/secure/license/af2d8925-3f02-4d5e-bef8-9f03ec2bc3e4
-This returns:
-  {"id":"af2d8925-3f02-4d5e-bef8-9f03ec2bc3e4","name":"anotherLicense","text":"This license is ...","feedIds":[]}
+  $ curl -X DELETE http://<web_url>:<port>/api/metadata/1.0/secure/license/<license_id>
+This deletes the license identified by <license_id> and returns:
+  {"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]}
 
 Update a license:
-  $ curl -H "Content-Type: application/json" -X PUT -d '{"name":"new name", "text": "modified text", "action": "remove", "feedIds":["asx"]}' http://<web_url>:<port>/api/metadata/1.0/secure/license/cc49be68-e840-4824-814d-7ccb6a21b17b
-This returns:
-  {"id":"cc49be68-e840-4824-814d-7ccb6a21b17b","name":"new name","text":"modified text","feedIds":["sder","xxde"]}
+  $ curl -H "Content-Type: multipart/form-data" -X PUT http://<web_url>:<port>/api/metadata/1.0/secure/license/<license_id>?<params> [-F "file=@<new_local_file_path>]
+  <params> is any combination of:
+    - name=<new_name>
+    - feeds=<comma_separated_feed_ids>
+    - action=remove
+This will 
+  - update the name of the license if a new name is provided 
+  - update feeds under that license if a new list of feeds are provided :
+    * if action is present in <params> and is equal to "remove" then the provided feeds will be removed from this license (they will have no license)
+    * else the provieded feeds will change there license to this one
+  - update de license file to <new_local_file> if provided
+  - returns:
+  {"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]}
 
-If "action" is not "remove" (anything else or even not given) this will add the feedIds to the license.
 Adding a feedId to a license will automatically remove it from any other license.
+
+
+Miscdata has the same syntax, just change license to miscdata in the requests.
+

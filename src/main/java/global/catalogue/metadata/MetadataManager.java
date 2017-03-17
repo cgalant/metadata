@@ -2,6 +2,7 @@ package global.catalogue.metadata;
 
 import global.catalogue.commons.CORSFilter;
 import global.catalogue.metadata.controllers.api.LicenseController;
+import global.catalogue.metadata.controllers.api.MiscDataController;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +47,7 @@ public class MetadataManager {
         else
             apiPrefix += "v1/";
         LicenseController.register(apiPrefix);
+        MiscDataController.register(apiPrefix);
         
         before(apiPrefix + "secure/*", (request, response) -> {
         	if (request.requestMethod().equals("OPTIONS"))
