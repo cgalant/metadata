@@ -89,6 +89,12 @@ public class LicenseController {
         license.delete();
         return license;
     }
+
+    public static License deleteLicenses(Request req, Response res) throws IOException {
+        for (License license: License.getAll())
+	    license.delete();
+        return null;
+    }
     
     private static void handleLicenseFile(Request req, License license, boolean create) throws IOException, ServletException {
     	if (req.raw().getAttribute("org.eclipse.jetty.multipartConfig") == null) {
@@ -181,6 +187,7 @@ public class LicenseController {
     }
     
 	public static void register(String apiPrefix) {
+		options(apiPrefix + "secure/licenses", (q, s) -> "");
 		options(apiPrefix + "secure/license", (q, s) -> "");
 		options(apiPrefix + "secure/license/:id", (q, s) -> "");
 		get(apiPrefix + "secure/license", LicenseController::getAllLicenses, json::write);
@@ -188,5 +195,6 @@ public class LicenseController {
         post(apiPrefix + "secure/license", LicenseController::createLicense, json::write);
         put(apiPrefix + "secure/license/:id", LicenseController::updateLicense, json::write);
         delete(apiPrefix + "secure/license/:id", LicenseController::deleteLicense, json::write);
+        delete(apiPrefix + "secure/licenses", LicenseController::deleteLicenses, json::write);
 	}
 }

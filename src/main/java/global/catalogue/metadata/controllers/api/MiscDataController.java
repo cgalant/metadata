@@ -89,6 +89,12 @@ public class MiscDataController {
         miscData.delete();
         return miscData;
     }
+
+    public static MiscData deleteMiscDatas(Request req, Response res) throws IOException {
+        for (MiscData miscData : MiscData.getAll())
+	    miscData.delete();
+        return null;
+    }
     
     private static void handleMiscDataFile(Request req, MiscData miscData, boolean create) throws IOException, ServletException {
     	if (req.raw().getAttribute("org.eclipse.jetty.multipartConfig") == null) {
@@ -181,6 +187,7 @@ public class MiscDataController {
     }
 
     public static void register(String apiPrefix) {
+		options(apiPrefix + "secure/miscdatas", (q, s) -> "");
 		options(apiPrefix + "secure/miscdata", (q, s) -> "");
 		options(apiPrefix + "secure/miscdata/:id", (q, s) -> "");
 		get(apiPrefix + "secure/miscdata", MiscDataController::getAllMiscData, json::write);
@@ -188,5 +195,6 @@ public class MiscDataController {
         post(apiPrefix + "secure/miscdata", MiscDataController::createMiscData, json::write);
         put(apiPrefix + "secure/miscdata/:id", MiscDataController::updateMiscData, json::write);
         delete(apiPrefix + "secure/miscdata/:id", MiscDataController::deleteMiscData, json::write);
+        delete(apiPrefix + "secure/miscdatas", MiscDataController::deleteMiscDatas, json::write);
 	}
 }
