@@ -22,6 +22,10 @@ Delete a license:
 This deletes the license identified by <license_id> and returns:
   {"id":"<server_generated_license_id>","name":"<license_name>","originalFileName":<file_name_from_<local_file_path>>,"feedIds":[<feed_id>(,<feed_id>)*]}
 
+Delete all licenses:
+  $ curl -X DELETE http://<web_url>:<port>/api/metadata/1.0/secure/licenses
+This deletes all the licenses in the database and returns: null
+
 Update a license:
   $ curl -H "Content-Type: multipart/form-data" -X PUT http://<web_url>:<port>/api/metadata/1.0/secure/license/<license_id>?<params> [-F "file=@<new_local_file_path>]
   <params> is any combination of:
