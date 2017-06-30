@@ -7,9 +7,9 @@
     </layout>
   </appender>
   
-  <logger name="com.base22" level="TRACE"/>
+  <logger name="com.global.catalogue" level="DEBUG"/>
   
-  <root level="debug">
+  <root level="WARN">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>
