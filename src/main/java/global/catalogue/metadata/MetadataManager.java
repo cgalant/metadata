@@ -4,9 +4,9 @@ import global.catalogue.commons.CORSFilter;
 import global.catalogue.metadata.controllers.api.LicenseController;
 import global.catalogue.metadata.controllers.api.MiscDataController;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
+
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,24 +21,27 @@ public class MetadataManager {
     private static String apiPrefix = "/api/metadata/";
     public static String storeRepos = "/opt/catalogue/metadata/";
     
-    public static void main(String[] args) throws IOException {
-        initConfig(args);
-        initHttpServer();
+    public static void main(String[] args) throws IOException, URISyntaxException {
+
+        MetadataManager manager = new MetadataManager();
+        manager.initConfig(args);
+        manager.initHttpServer();
     }
     
-    private static void initConfig(String[] args) throws IOException {
-        FileInputStream in;
-        if (args.length == 0)
-            in = new FileInputStream(new File("config.yml"));
+    private void initConfig(String[] args) throws IOException, URISyntaxException {
+        InputStream is;
+        if (args.length == 0){
+            is = ClassLoader.getSystemResourceAsStream("config.yml");
+        }
         else
-            in = new FileInputStream(new File(args[0]));
+            is = new FileInputStream(new File(args[0]));
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        config = mapper.readTree(in);
+        config = mapper.readTree(is);
         if (config.get("metadata").has("store_repos"))
         	storeRepos = config.get("metadata").get("store_repos").asText();
     }
     
-    private static void initHttpServer() {
+    private void initHttpServer() {
         if (config.get("metadata").has("port"))
             port(Integer.parseInt(config.get("metadata").get("port").asText()));
         CORSFilter.apply();
