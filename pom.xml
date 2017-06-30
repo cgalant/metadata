@@ -15,20 +15,21 @@
         <url>https://github.com/catalogueglobal/metadata.git</url>
     </scm>
 
-    <!-- Define where the artifacts produced by this build will be deployed
     <distributionManagement>
-      <repository>
-        <id>catalogue-maven-repo</id>
-        <name>Catalogue Maven Repository</name>
-        <url>s3://maven.catalogue.global/</url>
-      </repository>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://tdfint01.tdvdigitalfactory.ovh/nexus/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://tdfint01.tdvdigitalfactory.ovh/nexus/repository/maven-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
-    -->
+
     <properties>
         <docker.image.name>${project.artifactId}</docker.image.name>
         <docker.image.version>${project.version}</docker.image.version>
-        <!-- TO DEFINE IN CI PLATFORM -->
-        <docker.repository></docker.repository>
+        <docker.repository>tdfint01.tdvdigitalfactory.ovh:8482</docker.repository>
     </properties>
 
     <build>
