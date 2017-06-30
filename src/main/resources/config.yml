@@ -1,4 +1,4 @@
 metadata:
   version: 1.0
-  port: 4600
-  store_repos: /opt/catalogue
+  port: 4400
+  store_repos: /root/data
