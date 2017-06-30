@@ -8,7 +8,7 @@ ENV SLEEP_TIME 0
 RUN sh -c 'mkdir /root/metadata'
 #RUN sh -c 'mkdir /root/metadata/conf'
 ADD metadata.jar /root/metadata/metadata.jar
-ADD config.yml /root/metadata/config.yml
+#ADD config.yml /root/metadata/config.yml
 
 RUN sh -c 'touch /root/metadata/metadata.jar'
 
