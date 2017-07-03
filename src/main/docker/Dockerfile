@@ -15,4 +15,4 @@ RUN sh -c 'touch /root/metadata/metadata.jar'
 EXPOSE 4400
 CMD echo "The application will start in ${SLEEP_TIME}s..." && \
     sleep ${SLEEP_TIME} && \
-    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /root/metadata/metadata.jar /root/metadata/config.yml
+    java ${JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom -jar /root/metadata/metadata.jar ${CONFIG_FILE}
